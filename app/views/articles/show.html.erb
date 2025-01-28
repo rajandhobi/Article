@@ -1,0 +1,105 @@
+<h2>Title :  <%= @article.title %> </h2>
+<h2>Description :<br></h2> <%= @article.body %>
+<br>
+<% if @article.image.attached? %>
+  <%= image_tag @article.image.variant(:thumb),grayscale: true,
+  saver: { quality: 30 } %>
+
+<% end %>
+<br>
+
+<% if @article.video.attached? %>
+<h4> Attached video </h4>
+    <div>
+      <%= image_tag @article.video.preview(:thumb) %> <br>
+      <%= video_tag @article.video, controls: true, width: 500 %>
+    </div>
+  <% end %>
+</div>
+
+
+<% if @article.documents.attached? %>
+  <h3>Attached Documents:</h3>
+  <% @article.documents.each do |doc| %>
+    <%= link_to doc.filename.to_s, url_for(doc) %> <br>
+  <% end %>
+<% end %>
+
+<ul>
+
+<% if policy(@article).update? %>
+<li>
+<%= link_to "Edit", edit_article_path(@article) %>
+</li>
+<% end %>
+
+<% if policy(@article).destroy? %>
+<li>
+<%= link_to "Delete", article_path(@article),data:{
+    turbo_method: :delete, turbo_confirm: :"Are you sure ?"
+} %> 
+</li>
+ <% end %>
+ 
+</ul>  
+<%= link_to 'Back', articles_path %> 
+
+
+    
+<h2> Comments </h2>
+<table border="1" style="width: 40%;">
+<tr><th>Commenter</th>
+        <th>Comment </th>
+        <th> Delete </th>
+    </tr>
+
+
+<% @article.comments.each do |comment| %>
+    
+    <tr>  <td><%= comment.commenter %> </td>
+    <td> <%= comment.body %></td>
+    <td>
+     <p>
+    <% if policy(comment).destroy? %>
+<%= link_to "Destroy Comment",[comment.article,comment], data:{
+        turbo_method: :delete , turbo_confirm: :"Are you sure?"
+    } %>    
+     <% end %>
+   
+    </p>
+     </td>
+     </tr>
+
+    
+
+
+<% end %>
+</table>
+
+
+
+
+<% if policy(Comment.new).create? %>
+<h2> Add Comments </h2>
+
+
+
+<%= form_with model: [@article, @article.comments.build ] do |form| %>
+    <div>
+    <%= form.label :commenter %>  :
+    <%= form.text_field :commenter %>
+    </div>
+
+    <div>   
+    <%= form.label :comment %>  :
+    <%= form.text_area :body %>
+    </div>
+
+    <div>
+    <%= form.submit %>
+    </div>
+
+<% end %>
+<% end %>
+
+

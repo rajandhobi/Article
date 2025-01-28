@@ -1,0 +1,54 @@
+<%= form_with model: article do |form| %>
+    
+    <div>
+    <%= form.label :title %>  :
+    <%= form.text_field :title %>
+    <% @article.errors.full_messages_for(:title).each do |message| %>
+       <div> <%= message %> </div>
+    <% end %>
+    </div>
+
+    <div>
+    <%= form.label :Description %>:<br>
+    <%= form.text_area :body %>
+    <% @article.errors.full_messages_for(:body).each do |message| %>
+        <div> <% message %> </div>
+    <% end %>
+    </div>
+
+    <div>
+    <%= form.label :image,"Upload an image" %> : 
+    <%= form.file_field :image%>
+    </div>
+
+    <div>
+    <%= form.label :video,"Upload an video" %> : 
+    <%= form.file_field :video%>
+    </div>
+
+
+    <div>
+    <h3>Previously Attached Documents:</h3>
+    <% @article.documents.each do |doc| %>
+      <p>
+        <%= link_to doc.filename.to_s, url_for(doc) %>
+        <!-- Add a hidden field to persist the document -->
+        <%= form.hidden_field :documents, multiple: true, direct_upload: true,value: doc.signed_id %>
+      </p>
+    <% end %>
+  </div>
+
+    <div>
+    <%= form.label :documents , "Upload documents" %>
+    <%= form.file_field :documents, multiple: true %> 
+    </div>
+
+    <div>
+    <%= form.submit %>
+    </div>
+    
+<% end %>
+<%= link_to 'Back', article_path(@article) %> 
+
+
+
