@@ -29,6 +29,11 @@ gem 'image_processing', '~> 1.2'
 
 gem 'mini_magick'
 
+gem 'bootstrap', '~> 5.3.3'
+gem 'sassc-rails'
+gem 'jquery-rails'
+gem 'sprockets-rails'
+
 
 
 
@@ -42,6 +47,9 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
+# gem 'rubocop-rails'
+
+
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false

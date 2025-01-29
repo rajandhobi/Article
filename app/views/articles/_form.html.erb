@@ -1,54 +1,49 @@
 <%= form_with model: article do |form| %>
     
-    <div>
-    <%= form.label :title %>  :
-    <%= form.text_field :title %>
+  <div class="mb-3">
+    <%= form.label :title, class: "form-label" %> :
+    <%= form.text_field :title, class: "form-control w-50 p-1" %>
     <% @article.errors.full_messages_for(:title).each do |message| %>
-       <div> <%= message %> </div>
+      <div class="text-danger small"><%= message %></div>
     <% end %>
-    </div>
+  </div>
 
-    <div>
-    <%= form.label :Description %>:<br>
-    <%= form.text_area :body %>
+  <div class="mb-3">
+    <%= form.label :body, "Description", class: "form-label" %> :<br>
+    <%= form.text_area :body, class: "form-control w-50 p-1" %>
     <% @article.errors.full_messages_for(:body).each do |message| %>
-        <div> <% message %> </div>
+      <div class="text-danger small"><%= message %></div>
     <% end %>
-    </div>
+  </div>
 
-    <div>
-    <%= form.label :image,"Upload an image" %> : 
-    <%= form.file_field :image%>
-    </div>
+  <div class="mb-3">
+    <%= form.label :image, "Upload an image", class: "form-label" %> : 
+    <%= form.file_field :image, class: "form-control w-25 p-1"%>
+  </div>
 
-    <div>
-    <%= form.label :video,"Upload an video" %> : 
-    <%= form.file_field :video%>
-    </div>
+  <div class="mb-3">
+    <%= form.label :video, "Upload a video", class: "form-label" %> : 
+    <%= form.file_field :video, class: "form-control w-25 p-1"%>
+  </div>
 
-
-    <div>
-    <h3>Previously Attached Documents:</h3>
+  <div class="mb-3">
     <% @article.documents.each do |doc| %>
       <p>
         <%= link_to doc.filename.to_s, url_for(doc) %>
-        <!-- Add a hidden field to persist the document -->
-        <%= form.hidden_field :documents, multiple: true, direct_upload: true,value: doc.signed_id %>
+        <%= form.hidden_field :documents, multiple: true, direct_upload: true, value: doc.signed_id %>
       </p>
     <% end %>
   </div>
 
-    <div>
-    <%= form.label :documents , "Upload documents" %>
-    <%= form.file_field :documents, multiple: true %> 
-    </div>
+  <div class="mb-3">
+    <%= form.label :documents, "Upload documents", class: "form-label" %>
+    <%= form.file_field :documents, multiple: true, class: "form-control w-25 p-1" %> 
+  </div>
 
-    <div>
-    <%= form.submit %>
-    </div>
-    
+  <div class="mb-3">
+    <%= form.submit "Create Article", class: "btn btn-primary" %>
+  </div>
+
+  
 <% end %>
-<%= link_to 'Back', article_path(@article) %> 
-
-
 
