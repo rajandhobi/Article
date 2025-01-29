@@ -5,7 +5,7 @@ class Article < ApplicationRecord
     validates :title, presence: true
     validates :body, presence: true, length: { minimum: 10 }
     has_one_attached :image do |attachable|
-      attachable.variant :thumb,resize_to_fill: [300,300]
+      attachable.variant :thumb,resize_to_fill: [400,300]
     end
 
     has_one_attached :video do |attachable|

@@ -1,2 +1,28 @@
 // Custom bootstrap variables must be set or imported *before* bootstrap.
 @import "bootstrap";
+
+.hover-effect {
+    color: rgba(255, 255, 255, 0.71);
+    padding: 40px;
+    transition: all 0.3s ease-in-out;
+    height: 100%; /* Ensures uniform height */
+    display: flex;
+    flex-direction: column;
+    
+  }
+  
+  .hover-effect:hover {
+    background-color: #007bff98;
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+  
+
+  
+  .card-body {
+    flex-grow: 1; /* Makes content fill the card evenly */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  

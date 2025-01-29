@@ -35,13 +35,13 @@
     <% end %>
   </div>
 
-  <div class="mb-3">
+  <div class="mb-2">
     <%= form.label :documents, "Upload documents", class: "form-label" %>
     <%= form.file_field :documents, multiple: true, class: "form-control w-25 p-1" %> 
   </div>
 
-  <div class="mb-3">
-    <%= form.submit "Create Article", class: "btn btn-primary" %>
+  <div class="mb-2">
+<%= form.submit @article.persisted? ? "Update Article" : "Create Article", class: "btn btn-primary" %>
   </div>
 
   

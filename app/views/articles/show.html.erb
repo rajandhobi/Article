@@ -1,100 +1,112 @@
-<h2>Title :  <%= @article.title %> </h2>
-<h2>Description :<br></h2> <%= @article.body %>
-<br>
-<% if @article.image.attached? %>
-  <%= image_tag @article.image.variant(:thumb),grayscale: true,
-  saver: { quality: 30 } %>
+<div class="container my-4">
+  <div class="card shadow-lg">
+    <div class="card-body">
+      
+      <!-- Article Title -->
+      <h2 class="text-success mb-3"> <i class="bi bi-newspaper"></i> Title: <%= @article.title %> </h2>
+      
+      <!-- Attached Image -->
+      <% if @article.image.attached? %>
+        <div class="text-center">
+          <%= image_tag @article.image.variant(:thumb), class: "img-fluid rounded shadow-lg my-3", style: "max-width: 100%;" %>
+        </div>
+      <% end %>
 
-<% end %>
-<br>
+      <!-- Article Description -->
+      <h4 class="text-secondary">Description:</h4> 
+      <p class="w-100 p-3 border rounded bg-light"><%= @article.body %></p>
+      
+     
 
-<% if @article.video.attached? %>
-<h4> Attached video </h4>
-    <div>
-      <%# image_tag @article.video.preview(:thumb) %> <br>
+      <!-- Attached Video -->
+      <% if @article.video.attached? %>
+        <div class="my-4">
+          <h5 class="text-primary"><i class="bi bi-camera-video-fill"></i> Attached Video:</h5>
+          <div class="text-center">
+            <%= video_tag @article.video, controls: true, class: "rounded shadow-lg", width: 500 %>
+          </div>
+        </div>
+      <% end %>
 
+      <!-- Attached Documents -->
+      <% if @article.documents.attached? %>
+        <h5 class="text-info my-3"><i class="bi bi-file-earmark-text"></i> Attached Documents:</h5>
+        <ul class="list-group w-50">
+          <% @article.documents.each do |doc| %>
+            <li class="list-group-item">
+              <%= link_to doc.filename.to_s, url_for(doc), class: "text-dark fw-bold text-decoration-none" %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
 
-      <%= video_tag @article.video, controls: true, width: 500 %>
-    </div>
-  <% end %>
-</div>
-
-
-<% if @article.documents.attached? %>
-  <h3>Attached Documents:</h3>
-  <% @article.documents.each do |doc| %>
-    <%= link_to doc.filename.to_s, url_for(doc) %> <br>
-  <% end %>
-<% end %>
-
-<ul>
-
-<% if policy(@article).update? %>
-<li>
-<%= link_to "Edit", edit_article_path(@article) %>
-</li>
-<% end %>
-
-<% if policy(@article).destroy? %>
-<li>
-<%= button_to "Delete", article_path(@article), method: :delete,data:{
-    turbo_confirm: :"Are you sure ?"
-} ,class: "btn btn-danger"%> 
-</li>
- <% end %>
- 
-</ul>  
-<%= link_to 'Back', articles_path %> 
-
-
-    
-<h2> Comments </h2>
-<table class="table table-bordered" style="width: 40%;">
-  <tr>
-    <th>Commenter</th>
-    <th>Comment</th>
-    <th>Delete</th>
-  </tr>
-
-  <% @article.comments.each do |comment| %>
-    <tr>
-      <td><%= comment.commenter %></td>
-      <td><%= comment.body %></td>
-      <td>
-        <% if policy(comment).destroy? %>
-          <%= button_to "Delete Comment", [comment.article, comment], method: :delete, 
-                data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %>    
+      <!-- Action Buttons -->
+      <div class="d-flex mt-4">
+        <% if policy(@article).update? %>
+          <%= link_to "Edit", edit_article_path(@article), class: "btn btn-warning me-2" %>
         <% end %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-
-
-
-
-
-<% if policy(Comment.new).create? %>
-<h2> Add Comments </h2>
-
-
-
-<%= form_with model: [@article, @article.comments.build ] do |form| %>
-    <div>
-    <%= form.label :commenter, class: "form-label" %>  :
-    <%= form.text_field :commenter ,class: "form-control w-25 p-1 m-2"%>
+        <% if policy(@article).destroy? %>
+          <%= button_to "Delete", article_path(@article), method: :delete, 
+            data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger" %> 
+        <% end %>
+        <%= link_to "Back", articles_path, class: "btn btn-secondary ms-auto" %>
+      </div>
+      
     </div>
+  </div>
 
-    <div>   
-    <%= form.label :comment, class: "form-label" %>  :
-    <%= form.text_area :body , class: "form-control w-50 p-1 m-2"%>
+  <!-- Comments Section -->
+  <div class="card shadow-lg my-5">
+    <div class="card-body">
+      <h2 class="text-primary"><i class="bi bi-chat-square-text"></i> Comments</h2>
+
+      <table class="table table-hover table-bordered w-75 mt-3">
+        <thead class="table-dark">
+          <tr>
+            <th>Commenter</th>
+            <th>Comment</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @article.comments.each do |comment| %>
+            <tr>
+              <td class="fw-bold"><%= comment.commenter %></td>
+              <td><%= comment.body %></td>
+              <td>
+                <% if policy(comment).destroy? %>
+                  <%= button_to "Delete", [comment.article, comment], method: :delete, 
+                        data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>    
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <!-- Add Comments -->
+      <% if policy(Comment.new).create? %>
+        <h2 class="text-success mt-4"> <i class="bi bi-pencil"></i> Add Comment </h2>
+
+        <div class="card mt-3 p-3 bg-light shadow-sm">
+          <%= form_with model: [@article, @article.comments.build], class: "p-3" do |form| %>
+            <div class="mb-3">
+              <%= form.label :commenter, class: "form-label fw-bold" %>
+              <%= form.text_field :commenter, class: "form-control w-50 p-2" %>
+            </div>
+  
+            <div class="mb-3">   
+              <%= form.label :comment, class: "form-label fw-bold" %>
+              <%= form.text_area :body, class: "form-control w-75 p-2" %>
+            </div>
+  
+            <div>
+              <%= form.submit "Create Comment", class: "btn btn-primary px-4" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
     </div>
-
-    <div>
-    <%= form.submit "Create Comment",class: "btn btn-primary"%>
-    </div>
-
-<% end %>
-<% end %>
-
-
+  </div>
+</div>
