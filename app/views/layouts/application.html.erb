@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Article final app" %></title>
+    <title><%= content_for(:title) || "Articles" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -10,80 +10,76 @@
         
     <%= yield :head %>
     
-     <%# Includes all stylesheet files in app/assets/stylesheets %>
-<%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 
   </head>
 
   <body class="d-flex flex-column min-vh-100"> <!-- Makes body take full height -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
 
-  <div class="container-fluid">
-    <%= link_to root_path, class: "navbar-brand" do %>
-      <%= image_tag "logo.webp", alt: "Avatar Logo", style: "width:60px;", class: "rounded-pill" %>
-    <% end %>
-  </div>
-
-  
-   
-
-    <div class="collapse navbar-collapse">
-      <ul class="navbar-nav ms-auto">
-        <% if user_signed_in? %>
-          <li class="nav-item">
-            <span class="nav-link text-light">Logged in as <b><%= current_user.email %></b></span>
-          </li>
-          <li class="nav-item">
-            <%= link_to 'Edit Profile', edit_user_registration_path, class: "nav-link text-light" %>
-          </li>
-          <li class="nav-item">
-            <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: "btn btn-danger btn-sm mt-1" %>
-          </li>
-        <% else %>
-          <li class="nav-item">
-            <%= link_to 'Sign In', new_user_session_path, class: "nav-link text-light" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to 'Sign Up', new_user_registration_path, class: "nav-link text-light" %>
-          </li>
+      <div class="container-fluid">
+        <%= link_to root_path, class: "navbar-brand" do %>
+          <%= image_tag "logo.webp", alt: "Avatar Logo", style: "width:60px;", class: "rounded-pill" %>
         <% end %>
-      </ul>
-    </div>
-  </nav>
+      </div>
 
-  <% if user_signed_in? %>
-    <div class="container mt-3 text-center">
-      <h3 class="text-primary">Role: <span class="badge bg-warning text-dark"><%= current_user.roles.first.name %></span></h3>
-    </div>
-  <% end %>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <% if user_signed_in? %>
+            <li class="nav-item">
+              <span class="nav-link text-light">Logged in as <b><%= current_user.email %></b></span>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Edit Profile', edit_user_registration_path, class: "nav-link text-light" %>
+            </li>
+            <li class="nav-item">
+              <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: "btn btn-danger btn-sm mt-1" %>
+            </li>
+          <% else %>
+            <li class="nav-item">
+              <%= link_to 'Sign In', new_user_session_path, class: "btn btn-outline-light me-2" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Sign Up', new_user_registration_path, class: "btn btn-warning" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </nav>
 
-  <div class="container mt-3">
-    <% if notice %>
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check-circle"></i> <%= notice %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <% if user_signed_in? %>
+      <div class="container mt-3 text-center">
+        <h3 class="text-primary">Role: <span class="badge bg-warning text-dark"><%= current_user.roles.first.name %></span></h3>
       </div>
     <% end %>
 
-    <% if alert %>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-exclamation-circle"></i> <%= alert %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="container mt-3">
+      <% if notice %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle"></i> <%= notice %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+
+      <% if alert %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-circle"></i> <%= alert %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+      
+      <%= yield %>
+    </div>
+
+    <footer class="bg-dark text-white text-center p-3 mt-auto">
+      <div class="container">
+        <p class="mb-0">
+          &copy; <%= Time.current.year %> News paper. All Rights Reserved.
+        </p>
       </div>
-    <% end %>
-    
-    <%= yield %>
-  </div>
+    </footer>
 
-  <footer class="bg-dark text-white text-center py-3 mt-auto">
-  <div class="container">
-    <p class="mb-0">
-      &copy; <%= Time.current.year %> News paper. All Rights Reserved.
-    </p>
-  </div>
-</footer>
-
-</body>
-
+  </body>
 </html>

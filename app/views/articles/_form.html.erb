@@ -1,3 +1,7 @@
+<%= javascript_include_tag "trix" %>
+<%= stylesheet_link_tag "trix" %>
+
+
 <%= form_with model: article do |form| %>
     
   <div class="mb-3">
@@ -10,7 +14,7 @@
 
   <div class="mb-3">
     <%= form.label :body, "Description", class: "form-label" %> :<br>
-    <%= form.text_area :body, class: "form-control w-50 p-1" %>
+    <%= form.rich_text_area :body, class: "form-control w-50 p-1" %>
     <% @article.errors.full_messages_for(:body).each do |message| %>
       <div class="text-danger small"><%= message %></div>
     <% end %>

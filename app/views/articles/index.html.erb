@@ -16,7 +16,7 @@
                 <i class="bi bi-file-earmark-text"></i>
                 <%= link_to article.title, article, class: "text-dark text-decoration-none fw-bold" %>
               </h4>
-              <p class="text-muted">Created at: <%= article.created_at.strftime("%d %b %Y") %></p>
+              <p class="text-muted">Created at: <span class="mark"> <%= article.created_at.strftime("%d %b %Y") %> </span></p>
               
               <div class="text-end">
                 <%= link_to "Read More", article_path(article), class: "btn btn-primary btn-sm" %>
