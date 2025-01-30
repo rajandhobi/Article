@@ -76,7 +76,7 @@
               <td>
                 <% if policy(comment).destroy? %>
                   <%= button_to "Delete", [comment.article, comment], method: :delete, 
-                        data: { turbo_confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>    
+                        data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>    
                 <% end %>
               </td>
             </tr>

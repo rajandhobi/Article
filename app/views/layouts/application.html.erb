@@ -17,15 +17,23 @@
   </head>
 
   <body class="d-flex flex-column min-vh-100"> <!-- Makes body take full height -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark px-4">
+    <div class="container-fluid">
+      
+      <!-- Logo -->
+      <%= link_to root_path, class: "navbar-brand me-2" do %>
+        <%= image_tag "logo.webp", alt: "Avatar Logo", style: "width:60px;", class: "rounded-pill" %>
+      <% end %>
 
-      <div class="container-fluid">
-        <%= link_to root_path, class: "navbar-brand" do %>
-          <%= image_tag "logo.webp", alt: "Avatar Logo", style: "width:60px;", class: "rounded-pill" %>
-        <% end %>
-      </div>
+      <!-- Back Button (Placed Immediately After Logo) -->
+      <%= link_to "Home", articles_path, class: "btn btn-outline-secondary text-light ms-2" %>
 
-      <div class="collapse navbar-collapse">
+      <!-- Navbar Toggler (For Mobile View) -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <% if user_signed_in? %>
             <li class="nav-item">
@@ -47,7 +55,8 @@
           <% end %>
         </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
 
     <% if user_signed_in? %>
       <div class="container mt-3 text-center">
@@ -73,9 +82,15 @@
       <%= yield %>
     </div>
 
+    <!--add other page here -->
+
+    
+
     <footer class="bg-dark text-white text-center p-3 mt-auto">
       <div class="container">
         <p class="mb-0">
+        <%= image_tag "logo.webp", alt: "Avatar Logo", style: "width:60px;", class: "rounded-pill" %>
+
           &copy; <%= Time.current.year %> News paper. All Rights Reserved.
         </p>
       </div>
