@@ -9,6 +9,8 @@
     <%= csp_meta_tag %>
         
     <%= yield :head %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+
     
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
@@ -57,12 +59,18 @@
       </div>
     </div>
   </nav>
+  
+<% if user_signed_in? %>
+  <div class="container mt-3 text-center">
+    <h3 class="text-primary">
+      Role: 
+      <span class="badge bg-warning text-dark">
+        <%= current_user.roles.any? ? current_user.roles.first.name : "User" %>
+      </span>
+    </h3>
+  </div>
+<% end %>
 
-    <% if user_signed_in? %>
-      <div class="container mt-3 text-center">
-        <h3 class="text-primary">Role: <span class="badge bg-warning text-dark"><%= current_user.roles.first.name %></span></h3>
-      </div>
-    <% end %>
 
     <div class="container mt-3">
       <% if notice %>

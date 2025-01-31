@@ -17,5 +17,10 @@ class Article < ApplicationRecord
     # end
 
     has_many_attached :documents
+
+    def self.ransackable_attributes(auth_object = nil)
+      ["body", "created_at", "id", "title", "updated_at"]
+    end
+  
   end
   

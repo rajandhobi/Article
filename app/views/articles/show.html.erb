@@ -1,3 +1,5 @@
+<%= turbo_frame_tag @article do %>
+
 <div class="container my-4">
   <div class="card shadow-lg">
     <div class="card-body">
@@ -55,6 +57,8 @@
     </div>
   </div>
 
+  <% end %>
+
   <!-- Comments Section -->
   <div class="card shadow-lg my-5">
     <div class="card-body">
@@ -65,7 +69,8 @@
           <tr>
             <th>Commenter</th>
             <th>Comment</th>
-            <th>Actions</th>
+            <th>Update</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -73,6 +78,9 @@
             <tr>
               <td class="fw-bold"><%= comment.commenter %></td>
               <td><%= comment.body %></td>
+              <td>  <% if policy(comment).update? %>
+              <%= link_to "Edit", edit_article_comment_path(@article, comment), class: "btn btn-warning btn-sm" %>
+            <% end %></td>
               <td>
                 <% if policy(comment).destroy? %>
                   <%= button_to "Delete", [comment.article, comment], method: :delete, 

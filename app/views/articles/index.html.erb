@@ -2,36 +2,69 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="text-primary"><i class="bi bi-journal-text"></i> Articles</h1>
     <% if policy(Article.new).create? %>
-      <%= link_to 'New Article', new_article_path, class: "btn btn-success rounded-pill px-4" %>
+      <%= link_to 'New Article', new_article_path, class: "btn btn-success rounded-pill px-4", data: { turbo_frame: "new_article" } %>
     <% end %>
   </div>
 
-  <% if @articles.any? %>
-    <div class="row">
-      <% @articles.each do |article| %>
-        <div class="col-md-4 mb-5">
-          <div class="card shadow-lg border-0 hover-effect h-100">
-          <% if article.image.attached? %>
-              <%= image_tag article.image.variant(resize_to_fill: [500, 400]), class: "card-img-top rounded-top img-fluid" %>
-            <% end %>
-            <div class="card-body">
-              <h4 class="card-title">
-                <i class="bi bi-file-earmark-text"></i>
-                <%= link_to article.title, article, class: "text-dark text-decoration-none fw-bold" %>
-              </h4>
-              <p class="text-muted">Created at: <span class="mark"> <%= article.created_at.strftime("%d %b %Y") %> </span></p>
-              
-              <div class="text-end">
-                <%= link_to "Read More", article_path(article), class: "btn btn-primary btn-sm" %>
+  <!-- search form -->
+
+  <div class="container mt-4 mb-5 bg-dark">
+  <div class="card p-3 shadow">
+    <%= search_form_for @q, url: articles_path, method: :get, class: "row g-3 align-items-center" do |f| %>
+      
+      <!-- Search by Title -->
+      <div class="col-md-4">
+        <%= f.label :title_cont, "Search by Title", class: "form-label fw-bold" %>
+        <%= f.text_field :title_cont, class: "form-control", placeholder: "Enter article title" %>
+      </div>
+      
+      <!-- Search by Created After Date -->
+      <div class="col-md-4">
+        <%= f.label :created_at_gteq, "Created After", class: "form-label fw-bold" %>
+        <%= f.date_field :created_at_gteq, class: "form-control" %>
+      </div>
+      
+      <!-- Search & Reset Buttons -->
+      <div class="col-md-4 d-flex align-items-end gap-2">
+        <%= f.submit "Search", class: "btn btn-primary px-4" %>
+        <%= link_to "Reset", articles_path, class: "btn btn-secondary px-4" %>
+      </div>
+
+    <% end %>
+  </div>
+</div>
+
+  
+
+  <%= turbo_frame_tag "articles_list" do %>
+    <% if @articles.any? %>
+      <div class="row">
+        <% @articles.each do |article| %>
+          <div class="col-md-4 mb-5">
+            <%= turbo_frame_tag dom_id(article) do %>
+              <div class="card shadow-lg border-0 hover-effect h-100">
+                <% if article.image.attached? %>
+                  <%= image_tag article.image.variant(resize_to_fill: [500, 400]), class: "card-img-top rounded-top img-fluid" %>
+                <% end %>
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <i class="bi bi-file-earmark-text"></i>
+                    <%= link_to article.title, article, class: "text-dark text-decoration-none fw-bold" %>
+                  </h4>
+                  <p class="text-muted">Created at: <span class="mark"> <%= article.created_at.strftime("%d %b %Y") %> </span></p>
+                  <div class="text-end">
+                    <%= link_to "Read More", article_path(article), class: "btn btn-primary btn-sm", data: { turbo_frame: dom_id(article) } %>
+                  </div>
+                </div>
               </div>
-            </div>
+            <% end %>  <%# This closes the turbo_frame_tag block %>
           </div>
-        </div>
-      <% end %>
-    </div>
-  <% else %>
-    <div class="alert alert-info text-center">
-      <i class="bi bi-info-circle"></i> No articles found.
-    </div>
+        <% end %> <%# This closes the @articles.each loop %>
+      </div>
+    <% else %>
+      <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle"></i> No articles found.
+      </div>
+    <% end %>
   <% end %>
 </div>

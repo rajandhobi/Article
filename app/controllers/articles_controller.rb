@@ -5,6 +5,11 @@ class ArticlesController < ApplicationController
 
   def index
     @articles = Article.all
+    if params[:q] && params[:q][:created_at_gteq].present?
+      params[:q][:created_at_gteq] = params[:q][:created_at_gteq].to_date.beginning_of_day
+    end
+    @q = Article.ransack(params[:q])
+    @articles = @q.result(distinct: true)
     
   end
 
@@ -22,9 +27,12 @@ class ArticlesController < ApplicationController
     authorize @article
 
     if @article.save
-      ArticleMailer.article_created(@article).deliver_now
+      # ArticleMailer.article_created(@article).deliver_now
 
-      redirect_to @article, notice: 'Article was successfully created.'
+      respond_to do |format|
+        format.html { redirect_to articles_path, notice: "Article was successfully created." }
+        format.turbo_stream
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -35,7 +43,10 @@ class ArticlesController < ApplicationController
   def update
     authorize @article
     if @article.update(article_params)
-      redirect_to @article, notice: 'Article was successfully updated.'
+      respond_to do |format|
+        format.html { redirect_to @article, notice: "Article was successfully updated." }
+        format.turbo_stream
+      end
     else
       render :edit, status: :unprocessable_entity
     end
@@ -45,7 +56,10 @@ class ArticlesController < ApplicationController
     authorize @article
       @article = Article.find(params[:id])
       if @article.destroy
-        redirect_to articles_path, notice: 'Article was successfully deleted.'
+        respond_to do |format|
+          format.html { redirect_to articles_path, notice: "Article was deleted." }
+          format.turbo_stream
+        end
       else
         redirect_to articles_path, alert: 'Article could not be deleted.'
       end

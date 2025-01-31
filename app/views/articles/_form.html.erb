@@ -2,7 +2,7 @@
 <%= stylesheet_link_tag "trix" %> -->
 
 
-<%= form_with model: article do |form| %>
+<%= form_with model: article , data: {turbo: true} do |form| %>
     
   <div class="mb-3">
     <%= form.label :title, class: "form-label" %> :

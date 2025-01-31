@@ -20,6 +20,9 @@ gem "jbuilder"
 gem "devise"
 gem "rolify"
 
+gem 'ransack'
+
+
 gem 'pundit'
 
 gem 'letter_opener'
